@@ -1,0 +1,301 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Russo+One&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply text-white min-h-screen relative;
+  background: linear-gradient(180deg, #23252b 0%, #1b1c21 100%);
+  background-attachment: fixed;
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+  padding: 0;
+  -webkit-app-region: no-drag;
+}
+
+/* Left side pattern */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 300px;
+  z-index: -1;
+  opacity: 0.15;
+  background-size: 40px 40px;
+  background-repeat: repeat;
+  background-image: 
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23ff6b00' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7L15 2z'/%3E%3Cpolyline points='14 2 14 8 20 8'/%3E%3Cpath d='m10 13 5 4-5 4'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect width='20' height='20' x='2' y='2' rx='2.18' ry='2.18'/%3E%3Cline x1='7' y1='2' x2='7' y2='22'/%3E%3Cline x1='17' y1='2' x2='17' y2='22'/%3E%3Cline x1='2' y1='12' x2='22' y2='12'/%3E%3Cline x1='2' y1='7' x2='7' y2='7'/%3E%3Cline x1='2' y1='17' x2='7' y2='17'/%3E%3Cline x1='17' y1='17' x2='22' y2='17'/%3E%3Cline x1='17' y1='7' x2='22' y2='7'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23ff9900' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpolygon points='10 8 16 12 10 16 10 8'/%3E%3C/svg%3E");
+  background-position: 0 0, 20px 20px, 40px 40px;
+  transform: translateX(-50%);
+  mix-blend-mode: soft-light;
+}
+
+/* Right side pattern */
+body::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 300px;
+  z-index: -1;
+  opacity: 0.15;
+  background-size: 40px 40px;
+  background-repeat: repeat;
+  background-image: 
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23ff6b00' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M15.6 11.6 22 7v10l-6.4-4.5v-1Z'/%3E%3Cpath d='M4 5h9l7 5-7 5H4a2 2 0 0 1-2-2V7c0-1.1.9-2 2-2Z'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect width='20' height='20' x='2' y='2' rx='2.18' ry='2.18'/%3E%3Cpath d='m7 2 10 20'/%3E%3Cpath d='m17 2-10 20'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23ff9900' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect width='18' height='18' x='3' y='3' rx='2'/%3E%3Cpath d='m9 8 6 4-6 4Z'/%3E%3C/svg%3E");
+  background-position: 0 0, 20px 20px, 40px 40px;
+  transform: translateX(50%);
+  mix-blend-mode: soft-light;
+}
+
+/* Add subtle texture overlay */
+.body-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0.4;
+  background-image: 
+    linear-gradient(to right, rgba(255,255,255,0.025) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Hero slider styles */
+.hero-slider {
+  position: relative;
+  overflow: hidden;
+  height: 70vh;
+  margin-bottom: 1rem;
+}
+
+.slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease-in-out;
+}
+
+.slide.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.hero-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Make title bar draggable */
+.select-none {
+  -webkit-app-region: drag;
+}
+
+/* Make buttons in title bar clickable */
+.select-none button {
+  -webkit-app-region: no-drag;
+}
+
+/* Mobile devices */
+@media (max-width: 640px) {
+  .hero-slider {
+    height: 50vh;
+  }
+  
+  .hero-content {
+    padding: 1rem;
+  }
+  
+  .hero-title {
+    font-size: 1.875rem !important;
+    line-height: 2.25rem !important;
+  }
+  
+  .hero-description {
+    font-size: 1rem !important;
+    line-height: 1.5rem !important;
+  }
+}
+
+/* Tablets */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .hero-slider {
+    height: 60vh;
+  }
+  
+  .hero-content {
+    padding: 2rem;
+  }
+  
+  .hero-title {
+    font-size: 2.25rem !important;
+    line-height: 2.5rem !important;
+  }
+  
+  .hero-description {
+    font-size: 1.125rem !important;
+    line-height: 1.75rem !important;
+  }
+}
+
+/* Larger screens */
+@media (min-width: 1025px) {
+  .hero-slider {
+    height: 70vh;
+  }
+  
+  .hero-content {
+    padding: 4rem;
+  }
+}
+
+/* Button styles */
+.btn-primary {
+  @apply px-4 py-2 rounded-lg font-semibold transition-all duration-300;
+  background: linear-gradient(90deg, #ff6b00 0%, #ff9900 100%);
+}
+
+.btn-primary:hover {
+  @apply transform scale-105;
+  background: linear-gradient(90deg, #ff9900 0%, #ff6b00 100%);
+}
+
+/* App title styles */
+.app-title {
+  font-family: 'Russo One', sans-serif;
+  font-size: 2.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.app-title span {
+  background: linear-gradient(to right, #ff6b00, #ff9900);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.app-title .highlight {
+  -webkit-text-fill-color: white;
+  color: white;
+}
+
+/* Hide scrollbar */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* TV Display Optimizations */
+@media screen and (min-width: 1920px) {
+  :root {
+    --spacing-base: 1.5rem;
+    font-size: 18px; /* Larger base font size for TV */
+  }
+
+  /* Larger text for TV viewing distance */
+  h1 { font-size: 3rem; }
+  h2 { font-size: 2.5rem; }
+  h3 { font-size: 2rem; }
+  p, button, input { font-size: 1.25rem; }
+
+  /* Enhanced focus states for remote navigation */
+  *:focus-visible {
+    outline: 4px solid #ff6b00 !important;
+    outline-offset: 4px !important;
+    transition: outline-offset 0.2s ease;
+  }
+
+  /* Larger clickable areas for remote navigation */
+  button, 
+  .btn-primary,
+  [role="button"] {
+    min-height: 60px;
+    min-width: 60px;
+    padding: 1rem 1.5rem;
+  }
+
+  /* Optimize video grid layout */
+  .video-grid {
+    gap: 2rem;
+    padding: 2rem;
+  }
+
+  /* Larger thumbnails for TV */
+  .video-thumbnail {
+    width: 360px;
+    height: 240px;
+  }
+
+  /* Enhanced video player */
+  .video-player {
+    max-width: 90vw;
+    max-height: 80vh;
+  }
+
+  /* Larger modal for TV */
+  .modal-content {
+    min-width: 60vw;
+    padding: 2rem;
+  }
+
+  /* Larger category cards */
+  .category-card {
+    padding: 2rem;
+    margin: 1rem;
+  }
+}
+
+/* 4K TV Support */
+@media screen and (min-width: 3840px) {
+  :root {
+    --spacing-base: 2rem;
+    font-size: 24px;
+  }
+
+  /* Even larger elements for 4K */
+  .video-thumbnail {
+    width: 480px;
+    height: 320px;
+  }
+
+  /* Adjust grid for 4K */
+  .video-grid {
+    gap: 3rem;
+    padding: 3rem;
+  }
+
+  /* Larger focus indicators for 4K */
+  *:focus-visible {
+    outline-width: 6px !important;
+    outline-offset: 6px !important;
+  }
+}
+
+/* Remote control navigation improvements */
+@media (hover: none) {
+  /* Make the current focused element very clear */
+  *:focus-visible {
+    transform: scale(1.05);
+    transition: transform 0.2s ease;
+  }
+
+  /* Ensure scrolling is smooth for remote navigation */
+  * {
+    scroll-behavior: smooth;
+  }
+}

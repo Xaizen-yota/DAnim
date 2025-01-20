@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#23252b" />
+    <meta name="msapplication-navbutton-color" content="#23252b" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <title>Danime - Your Video Library</title>
+    <link rel="manifest" href="manifest.json" />
+    <!-- Add the GPT Engineer script before the main application script -->
+    <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
+    <style>
+      /* Custom title bar colors */
+      :root {
+        --titlebar-bg: #23252b;
+        --titlebar-text: #ffffff;
+        --titlebar-button-hover: #ff6b00;
+        color-scheme: dark;
+      }
+      
+      /* Apply custom colors to window controls */
+      .window-controls {
+        background-color: var(--titlebar-bg);
+        color: var(--titlebar-text);
+      }
+      
+      .window-controls button:hover {
+        background-color: var(--titlebar-button-hover);
+      }
+      
+      body {
+        background-color: #23252b;
+      }
+      
+      /* Chrome title bar customization */
+      @media (prefers-color-scheme: dark) {
+        body {
+          background: #23252b;
+          color: #ff6b00;
+        }
+      }
+      
+      /* Firefox title bar customization */
+      @-moz-document url-prefix() {
+        body {
+          background: #23252b;
+          color: #ff6b00;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="main.tsx"></script>
+  </body>
+</html>
