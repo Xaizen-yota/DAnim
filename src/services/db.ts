@@ -25,20 +25,51 @@ let db: IDBPDatabase<MovielandDB>;
 export async function initDB() {
   console.group('Database Initialization');
   console.log('Initializing database...');
+  
+  // Check if IndexedDB is available
+  if (!window.indexedDB) {
+    console.error('IndexedDB is not available in this browser');
+    throw new Error('IndexedDB is not supported in this browser');
+  }
+
   try {
     db = await openDB<MovielandDB>('movieland', 1, {
-      upgrade(db) {
-        console.log('Creating/upgrading database stores...');
+      upgrade(db, oldVersion, newVersion, transaction) {
+        console.log(`Upgrading database from version ${oldVersion} to ${newVersion}`);
+        
         if (!db.objectStoreNames.contains('videos')) {
-          db.createObjectStore('videos', { keyPath: 'id' });
-          console.log('Created videos store');
+          console.log('Creating videos store...');
+          const videoStore = db.createObjectStore('videos', { keyPath: 'id' });
+          videoStore.createIndex('categoryId', 'categoryId', { unique: false });
+          console.log('Created videos store with categoryId index');
         }
+        
         if (!db.objectStoreNames.contains('categories')) {
+          console.log('Creating categories store...');
           db.createObjectStore('categories', { keyPath: 'id' });
           console.log('Created categories store');
         }
+
+        transaction.oncomplete = () => {
+          console.log('Database upgrade transaction completed successfully');
+        };
+
+        transaction.onerror = (event) => {
+          console.error('Database upgrade transaction failed:', event);
+        };
       },
+      blocked(currentVersion, blockedVersion, event) {
+        console.warn('Database upgrade blocked. Current version:', currentVersion, 'Blocked version:', blockedVersion);
+        alert('Please close other tabs with this site open and reload.');
+      },
+      blocking(currentVersion, blockedVersion, event) {
+        console.warn('Database is blocking upgrade. Current version:', currentVersion, 'Blocked version:', blockedVersion);
+      },
+      terminated() {
+        console.error('Database connection was terminated unexpectedly');
+      }
     });
+    
     console.log('Database initialized successfully');
     console.groupEnd();
     return db;
@@ -49,10 +80,21 @@ export async function initDB() {
   }
 }
 
+// Add a function to check database connection
+export async function checkDB() {
+  if (!db) {
+    console.log('Database not initialized, attempting to initialize...');
+    await initDB();
+  }
+  return db;
+}
+
 export async function addVideo(videoData: FormData): Promise<Video> {
   console.group('Add Video');
   console.log('Processing video data...');
+  
   try {
+    await checkDB();
     const categoryId = videoData.get('categoryId') as string;
     const video = videoData.get('video') as File;
     const thumbnail = videoData.get('thumbnail') as File | null;
