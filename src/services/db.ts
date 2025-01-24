@@ -346,3 +346,29 @@ export async function updateCategory(category: Category): Promise<void> {
     throw error;
   }
 }
+
+export async function updateVideoThumbnail(videoId: string, newThumbnail: File): Promise<void> {
+  console.group('Update Video Thumbnail');
+  try {
+    await checkDB();
+    
+    // Get the existing video
+    const video = await db.get('videos', videoId);
+    if (!video) {
+      throw new Error('Video not found');
+    }
+
+    // Update the video with the new thumbnail
+    await db.put('videos', {
+      ...video,
+      thumbnail: newThumbnail,
+    });
+
+    console.log('Thumbnail updated successfully');
+  } catch (error) {
+    console.error('Failed to update thumbnail:', error);
+    throw error;
+  } finally {
+    console.groupEnd();
+  }
+}

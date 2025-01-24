@@ -1,6 +1,7 @@
-import React, { useEffect, useRef } from 'react';
-import { X, Trash2, Calendar } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
+import { X, Trash2, Calendar, Image } from 'lucide-react';
 import { Video } from '../types';
+import * as db from '../services/db';
 
 interface VideoModalProps {
   video: Video;
@@ -10,6 +11,29 @@ interface VideoModalProps {
 
 export function VideoModal({ video, onClose, onDelete }: VideoModalProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [thumbnail, setThumbnail] = useState<string>(video.thumbnail);
+
+  const handleThumbnailChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      try {
+        // Create a new FormData instance
+        const formData = new FormData();
+        formData.set('thumbnail', file);
+        
+        // Update the video with the new thumbnail
+        await db.updateVideoThumbnail(video.id, file);
+        
+        // Update the UI
+        const newThumbnail = URL.createObjectURL(file);
+        setThumbnail(newThumbnail);
+      } catch (error) {
+        console.error('Failed to update thumbnail:', error);
+        alert('Failed to update thumbnail. Please try again.');
+      }
+    }
+  };
 
   // Handle keyboard shortcuts for video control
   useEffect(() => {
@@ -71,7 +95,7 @@ export function VideoModal({ video, onClose, onDelete }: VideoModalProps) {
                 ref={videoRef}
                 src={video.videoUrl} 
                 controls 
-                poster={video.thumbnail}
+                poster={thumbnail}
                 className="w-full h-full object-contain"
               />
             </div>
@@ -111,6 +135,20 @@ export function VideoModal({ video, onClose, onDelete }: VideoModalProps) {
           </div>
 
           <div className="flex justify-end pt-4 border-t border-gray-800">
+            <input
+              type="file"
+              ref={fileInputRef}
+              accept="image/*"
+              onChange={handleThumbnailChange}
+              className="hidden"
+            />
+            <button
+              onClick={() => fileInputRef.current?.click()}
+              className="p-2 text-gray-400 hover:text-orange-500 hover:bg-orange-500/10 rounded-full transition-colors mr-2"
+              title="Change thumbnail"
+            >
+              <Image className="w-5 h-5" />
+            </button>
             <button
               onClick={() => {
                 if (window.confirm('Are you sure you want to delete this video?')) {
