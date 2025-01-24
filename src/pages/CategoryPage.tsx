@@ -7,6 +7,7 @@ import * as db from '../services/db';
 import { ArrowLeft, Film, Trash2, Play, X } from '../components/icons';
 import { Edit2 } from 'lucide-react';
 import { EditCategoryModal } from '../components/EditCategoryModal';
+import { AddVideoModal } from '../components/AddVideoModal';
 
 export function CategoryPage() {
   const { id } = useParams<{ id: string }>();
@@ -17,6 +18,7 @@ export function CategoryPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [showAddModal, setShowAddModal] = useState(false);
 
   const loadContent = async () => {
     if (!id) return;
@@ -108,12 +110,15 @@ export function CategoryPage() {
         </div>
 
         {videos.length === 0 ? (
-          <div className="text-center py-12">
+          <div 
+            className="text-center py-12 cursor-pointer hover:bg-[#1b1c21] rounded-lg transition-colors"
+            onClick={() => setShowAddModal(true)}
+          >
             <div className="mb-4">
               <Film className="w-12 h-12 text-gray-500 mx-auto" />
             </div>
             <h3 className="text-lg font-medium text-gray-300 mb-2">No videos yet</h3>
-            <p className="text-gray-400">Add some videos to get started</p>
+            <p className="text-gray-400">Click here to add videos</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -174,6 +179,16 @@ export function CategoryPage() {
           category={category}
           onClose={() => setShowEditModal(false)}
           onCategoryUpdated={handleCategoryUpdated}
+        />
+      )}
+
+      {showAddModal && (
+        <AddVideoModal
+          onClose={() => setShowAddModal(false)}
+          onVideoAdded={() => {
+            setShowAddModal(false);
+            loadContent();
+          }}
         />
       )}
     </div>
