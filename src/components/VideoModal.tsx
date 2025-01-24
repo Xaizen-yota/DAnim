@@ -86,17 +86,17 @@ export function VideoModal({ video, onClose, onDelete }: VideoModalProps) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80">
-      <div className="bg-[#23252b] rounded-2xl w-[90vw] max-w-6xl flex flex-col sm:flex-row overflow-hidden shadow-2xl animate-scaleIn border border-gray-800">
+      <div className="bg-[#23252b] rounded-2xl w-[90vw] max-w-4xl flex flex-col sm:flex-row overflow-hidden shadow-2xl animate-scaleIn border border-gray-800">
         <div className="w-full sm:w-2/3 relative bg-gradient-to-b from-[#23252b] to-[#1b1c21] sm:border-r border-gray-800">
           <div className="absolute inset-0 bg-[#1b1c21]/50"></div>
           <div className="relative w-full h-full p-4">
-            <div className="w-full h-[40vh] sm:h-full rounded-xl overflow-hidden bg-gradient-to-b from-[#23252b] to-[#1b1c21] border border-gray-800/50 shadow-lg">
+            <div className="w-full h-[30vh] sm:h-full rounded-xl overflow-hidden bg-gradient-to-b from-[#23252b] to-[#1b1c21] border border-gray-800/50 shadow-lg">
               <video 
                 ref={videoRef}
                 src={video.videoUrl} 
                 controls 
                 poster={thumbnail}
-                className="w-full h-full object-contain"
+                className="w-full h-full object-contain max-h-[60vh]"
               />
             </div>
           </div>
