@@ -6,8 +6,8 @@ interface MovielandDB extends DBSchema {
     key: string;
     value: {
       id: string;
-      title: string;
-      description: string;
+      title?: string;
+      description?: string;
       thumbnail: Blob;
       video: Blob;
       categoryId: string;
@@ -53,14 +53,12 @@ export async function addVideo(videoData: FormData): Promise<Video> {
   console.group('Add Video');
   console.log('Processing video data...');
   try {
-    const title = videoData.get('title') as string;
-    const description = videoData.get('description') as string;
     const categoryId = videoData.get('categoryId') as string;
     const video = videoData.get('video') as File;
     const thumbnail = videoData.get('thumbnail') as File | null;
 
-    if (!title || !description || !categoryId || !video) {
-      throw new Error('Missing required fields');
+    if (!categoryId || !video) {
+      throw new Error('Missing required fields: category and video are required');
     }
 
     const videoId = crypto.randomUUID();
@@ -90,6 +88,10 @@ export async function addVideo(videoData: FormData): Promise<Video> {
         throw new Error('Failed to create default thumbnail');
       }
     }
+
+    // Get title from video filename or use default
+    const title = (videoData.get('title') as string) || video.name.split('.').slice(0, -1).join('.') || 'Untitled Video';
+    const description = (videoData.get('description') as string) || '';
 
     // Store the video data in IndexedDB
     await db.put('videos', {

@@ -14,6 +14,7 @@ export function AddVideoModal({ onClose, onVideoAdded }: AddVideoModalProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [useCustomThumbnail, setUseCustomThumbnail] = useState(false);
   const [previewThumbnail, setPreviewThumbnail] = useState<string | null>(null);
+  const [selectedVideos, setSelectedVideos] = useState<File[]>([]);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
@@ -78,35 +79,46 @@ export function AddVideoModal({ onClose, onVideoAdded }: AddVideoModalProps) {
     setIsSubmitting(true);
 
     try {
-      const title = formData.get('title');
-      const description = formData.get('description');
       const categoryId = formData.get('categoryId');
-      const video = formData.get('video') as File | null;
-      const thumbnail = formData.get('thumbnail') as File | null;
 
       console.log('Form Data:', {
-        title,
-        description,
         categoryId,
-        videoName: video?.name,
-        videoSize: video?.size,
-        thumbnailName: thumbnail?.name,
-        thumbnailSize: thumbnail?.size,
+        videosCount: selectedVideos.length,
       });
 
-      if (!title || !description || !categoryId || !video) {
-        throw new Error('Missing required fields');
+      if (!categoryId || selectedVideos.length === 0) {
+        throw new Error('Please select a category and at least one video');
       }
 
-      // If no thumbnail is provided, generate one from the video
-      if (!thumbnail && !useCustomThumbnail) {
-        generateThumbnail(video);
-        await new Promise(resolve => setTimeout(resolve, 1000)); // Wait for thumbnail generation
+      // Process each selected video
+      for (const video of selectedVideos) {
+        const newFormData = new FormData();
+        // Use video filename as title
+        const title = video.name.split('.').slice(0, -1).join('.') || video.name;
+        newFormData.set('title', title);
+        newFormData.set('description', ''); // Empty description
+        newFormData.set('categoryId', categoryId as string);
+        newFormData.set('video', video);
+
+        // If no thumbnail is provided, generate one from the video
+        if (!useCustomThumbnail) {
+          generateThumbnail(video);
+          await new Promise(resolve => setTimeout(resolve, 1000)); // Wait for thumbnail generation
+          const thumbnail = formData.get('thumbnail');
+          if (thumbnail) {
+            newFormData.set('thumbnail', thumbnail);
+          }
+        } else {
+          const thumbnail = formData.get('thumbnail');
+          if (thumbnail) {
+            newFormData.set('thumbnail', thumbnail);
+          }
+        }
+
+        console.log('Adding video to database:', video.name);
+        await db.addVideo(newFormData);
       }
 
-      console.log('Adding video to database...');
-      await db.addVideo(formData);
-      console.log('Video added successfully!');
       onVideoAdded();
       onClose();
     } catch (error) {
@@ -160,32 +172,6 @@ export function AddVideoModal({ onClose, onVideoAdded }: AddVideoModalProps) {
 
           <form onSubmit={handleSubmit}>
             <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-200 mb-1">Title</label>
-                <input
-                  type="text"
-                  required
-                  className="w-full px-3 py-2 bg-[#1b1c21] border border-gray-800 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
-                  onChange={(e) => {
-                    console.log('Setting title:', e.target.value);
-                    formData.set('title', e.target.value);
-                  }}
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-200 mb-1">Description</label>
-                <textarea
-                  required
-                  className="w-full px-3 py-2 bg-[#1b1c21] border border-gray-800 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
-                  rows={4}
-                  onChange={(e) => {
-                    console.log('Setting description:', e.target.value.length, 'characters');
-                    formData.set('description', e.target.value);
-                  }}
-                />
-              </div>
-
               <div>
                 <label className="block text-sm font-medium text-gray-200 mb-1">Category</label>
                 <select
@@ -251,27 +237,39 @@ export function AddVideoModal({ onClose, onVideoAdded }: AddVideoModalProps) {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-200 mb-1">Video File</label>
+                <label className="block text-sm font-medium text-gray-200 mb-1">Video Files</label>
                 <input
                   type="file"
                   required
+                  multiple
                   accept="video/*"
                   onChange={(e) => {
-                    const file = e.target.files?.[0];
-                    if (file) {
-                      console.log('Selected video:', {
-                        name: file.name,
-                        size: (file.size / 1024 / 1024).toFixed(2) + ' MB',
-                        type: file.type
-                      });
-                      formData.set('video', file);
-                      if (!useCustomThumbnail) {
-                        generateThumbnail(file);
+                    const files = Array.from(e.target.files || []);
+                    setSelectedVideos(files);
+                    if (files.length > 0) {
+                      console.log('Selected videos:', files.map(f => ({
+                        name: f.name,
+                        size: (f.size / 1024 / 1024).toFixed(2) + ' MB',
+                        type: f.type
+                      })));
+                      
+                      if (!useCustomThumbnail && files[0]) {
+                        generateThumbnail(files[0]);
                       }
                     }
                   }}
                   className="block w-full text-sm text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-orange-500 file:text-white hover:file:bg-orange-600"
                 />
+                {selectedVideos.length > 0 && (
+                  <div className="mt-2 text-sm text-gray-300">
+                    Selected {selectedVideos.length} video{selectedVideos.length !== 1 ? 's' : ''}:
+                    <ul className="mt-1 list-disc list-inside">
+                      {selectedVideos.map((file, index) => (
+                        <li key={index}>{file.name} ({(file.size / 1024 / 1024).toFixed(2)} MB)</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
               </div>
 
               <div className="flex justify-end space-x-3">
