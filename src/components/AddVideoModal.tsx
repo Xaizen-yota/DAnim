@@ -262,12 +262,7 @@ export function AddVideoModal({ onClose, onVideoAdded }: AddVideoModalProps) {
                 />
                 {selectedVideos.length > 0 && (
                   <div className="mt-2 text-sm text-gray-300">
-                    Selected {selectedVideos.length} video{selectedVideos.length !== 1 ? 's' : ''}:
-                    <ul className="mt-1 list-disc list-inside">
-                      {selectedVideos.map((file, index) => (
-                        <li key={index}>{file.name} ({(file.size / 1024 / 1024).toFixed(2)} MB)</li>
-                      ))}
-                    </ul>
+                    Selected {selectedVideos.length} video{selectedVideos.length !== 1 ? 's' : ''}
                   </div>
                 )}
               </div>
