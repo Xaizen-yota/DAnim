@@ -1,69 +1,74 @@
-# Welcome to your project
+# DAnim - Video Management Platform
 
-## Project info
+## Overview
+DAnim is a modern web application designed for efficient video management and organization. It provides an intuitive interface for users to upload, categorize, and manage their video content with ease.
 
-**URL**: https://lovable.dev/projects/e86af3f6-0364-43d1-9599-a088f197e320
+## Features
+- **Video Organization**: Create and manage categories to keep your videos organized
+- **Custom Thumbnails**: Upload or auto-generate thumbnails for your videos
+- **Responsive Design**: Optimized viewing experience across all devices
+- **Video Controls**: 
+  - Keyboard shortcuts for playback control
+  - Full-screen support
+  - Volume control
+  - Seeking functionality
 
-## How can I edit this code?
+## Technology Stack
+- **Frontend Framework**: React with TypeScript
+- **Styling**: Tailwind CSS
+- **UI Components**: shadcn-ui
+- **Build Tool**: Vite
+- **Database**: IndexedDB for client-side storage
 
-There are several ways of editing your application.
+## Getting Started
 
-**Use Lovable**
+### Prerequisites
+- Node.js (Latest LTS version recommended)
+- npm (comes with Node.js)
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/e86af3f6-0364-43d1-9599-a088f197e320) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
+### Installation
+1. Clone the repository:
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+git clone https://github.com/Xaizen-yota/DAnim.git
+```
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+2. Navigate to the project directory:
+```sh
+cd DAnim
+```
 
-# Step 3: Install the necessary dependencies.
-npm i
+3. Install dependencies:
+```sh
+npm install
+```
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+4. Start the development server:
+```sh
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+The application will be available at `http://localhost:5173`
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## Keyboard Shortcuts
+- **Space** or **K**: Play/Pause video
+- **F**: Toggle fullscreen
+- **←**: Rewind 10 seconds
+- **→**: Forward 10 seconds
+- **↑**: Increase volume
+- **↓**: Decrease volume
+- **ESC**: Exit fullscreen or close modal
 
-**Use GitHub Codespaces**
+## Deployment
+The project is deployed using Vercel and can be accessed at:
+- Production: https://danim.vercel.app/
+- Preview: https://d-anim-hmcn39d90-xaizen-yotas-projects.vercel.app/
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## Contributing
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-## What technologies are used for this project?
-
-This project is built with .
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/e86af3f6-0364-43d1-9599-a088f197e320) and click on Share -> Publish.
-
-## I want to use a custom domain - is that possible?
-
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
+## License
+This project is licensed under the MIT License.
