@@ -114,23 +114,9 @@ export function VideoModal({ video, onClose, onDelete }: VideoModalProps) {
 
           <div className="flex-1 flex flex-col">
             <div className="text-center mb-6">
-              <h2 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-orange-500 to-orange-600 text-transparent bg-clip-text mb-6">
+              <h2 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-orange-500 to-orange-600 text-transparent bg-clip-text">
                 {video.title}
               </h2>
-              
-              <div className="space-y-4">
-                <div className="text-center">
-                  <h3 className="text-sm font-semibold text-gray-400 mb-2">Description</h3>
-                  <p className="text-sm text-gray-300">{video.description}</p>
-                </div>
-                
-                <div className="text-center">
-                  <h3 className="text-sm font-semibold text-gray-400 mb-2">Added on</h3>
-                  <p className="text-sm text-gray-300">
-                    {new Date(video.createdAt).toLocaleDateString()}
-                  </p>
-                </div>
-              </div>
             </div>
           </div>
 
